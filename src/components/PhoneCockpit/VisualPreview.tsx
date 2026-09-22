@@ -13,8 +13,8 @@ export const VisualPreview: React.FC<VisualPreviewProps> = ({ incident, isDeploy
   return (
     <div
       style={{
-        background: 'var(--bg-card)',
-        borderRadius: '16px',
+        background: 'var(--bg-surface)',
+        borderRadius: 'var(--radius-lg)',
         border: '1px solid var(--border-subtle)',
         overflow: 'hidden',
         display: 'flex',
@@ -24,8 +24,8 @@ export const VisualPreview: React.FC<VisualPreviewProps> = ({ incident, isDeploy
       {/* Visual Preview Header */}
       <div
         style={{
-          padding: '12px 14px',
-          background: 'linear-gradient(135deg, rgba(255, 85, 0, 0.08), rgba(0, 229, 255, 0.06))',
+          padding: '10px 14px',
+          background: 'var(--bg-surface-raised)',
           borderBottom: '1px solid var(--border-subtle)',
           display: 'flex',
           alignItems: 'center',
@@ -33,40 +33,40 @@ export const VisualPreview: React.FC<VisualPreviewProps> = ({ incident, isDeploy
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Monitor size={15} color="var(--cyber-cyan)" />
-          <span style={{ fontSize: '12px', fontWeight: 700, color: '#FFFFFF' }}>
-            Live UX Impact Simulation
+          <Monitor size={14} color="var(--text-secondary)" />
+          <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-primary)' }}>
+            App Simulation
           </span>
         </div>
 
         {/* Before / After Switcher */}
-        <div style={{ display: 'flex', background: 'var(--bg-card-secondary)', borderRadius: '8px', padding: '2px' }}>
+        <div style={{ display: 'flex', background: 'var(--bg-app)', borderRadius: 'var(--radius-sm)', padding: '2px' }}>
           <button
             onClick={() => setActiveState('before')}
             style={{
-              background: activeState === 'before' ? 'rgba(255, 51, 102, 0.2)' : 'transparent',
-              border: activeState === 'before' ? '1px solid var(--status-critical)' : 'none',
-              color: activeState === 'before' ? '#FF5577' : '#94A3B8',
-              fontSize: '10px',
-              padding: '3px 8px',
-              borderRadius: '6px',
+              background: activeState === 'before' ? 'var(--status-error-bg)' : 'transparent',
+              border: activeState === 'before' ? '1px solid var(--status-error-border)' : '1px solid transparent',
+              color: activeState === 'before' ? '#F87171' : 'var(--text-muted)',
+              fontSize: '10.5px',
+              padding: '2px 8px',
+              borderRadius: '4px',
               cursor: 'pointer',
-              fontWeight: 600,
+              fontWeight: 500,
             }}
           >
-            Broken UI
+            Failing UI
           </button>
           <button
             onClick={() => setActiveState('after')}
             style={{
-              background: activeState === 'after' ? 'rgba(0, 245, 155, 0.2)' : 'transparent',
-              border: activeState === 'after' ? '1px solid var(--status-success)' : 'none',
-              color: activeState === 'after' ? '#00F59B' : '#94A3B8',
-              fontSize: '10px',
-              padding: '3px 8px',
-              borderRadius: '6px',
+              background: activeState === 'after' ? 'var(--status-success-bg)' : 'transparent',
+              border: activeState === 'after' ? '1px solid var(--status-success-border)' : '1px solid transparent',
+              color: activeState === 'after' ? 'var(--status-success)' : 'var(--text-muted)',
+              fontSize: '10.5px',
+              padding: '2px 8px',
+              borderRadius: '4px',
               cursor: 'pointer',
-              fontWeight: 600,
+              fontWeight: 500,
             }}
           >
             Fixed UI
@@ -75,75 +75,74 @@ export const VisualPreview: React.FC<VisualPreviewProps> = ({ incident, isDeploy
       </div>
 
       {/* Rendered Mock Viewport */}
-      <div style={{ padding: '14px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      <div style={{ padding: '12px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <div
           style={{
-            background: '#07090E',
+            background: '#09090B',
             border: '1px solid var(--border-subtle)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-md)',
             padding: '16px',
-            minHeight: '160px',
+            minHeight: '150px',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
             textAlign: 'center',
             position: 'relative',
-            overflow: 'hidden',
           }}
         >
           {activeState === 'before' ? (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', animation: 'pulseGlow 2s infinite' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
               <div
                 style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '50%',
-                  background: 'rgba(255, 51, 102, 0.15)',
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: 'var(--radius-sm)',
+                  background: 'var(--status-error-bg)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: 'var(--status-critical)',
+                  color: '#F87171',
                 }}
               >
-                <AlertTriangle size={22} />
+                <AlertTriangle size={18} />
               </div>
-              <div style={{ fontSize: '12px', fontWeight: 700, color: '#FF5577' }}>
+              <div style={{ fontSize: '12.5px', fontWeight: 600, color: '#F87171' }}>
                 {incident.visualPreview?.beforeLabel || 'Crash: Uncaught Error'}
               </div>
-              <div style={{ fontSize: '11px', color: '#94A3B8', maxWidth: '280px', lineHeight: 1.4 }}>
+              <div style={{ fontSize: '11.5px', color: 'var(--text-secondary)', maxWidth: '280px', lineHeight: 1.4 }}>
                 {incident.visualPreview?.brokenStateDescription || incident.rawLog}
               </div>
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
               <div
                 style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '50%',
-                  background: 'rgba(0, 245, 155, 0.15)',
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: 'var(--radius-sm)',
+                  background: 'var(--status-success-bg)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   color: 'var(--status-success)',
                 }}
               >
-                <CheckCircle2 size={22} />
+                <CheckCircle2 size={18} />
               </div>
-              <div style={{ fontSize: '12px', fontWeight: 700, color: '#00F59B' }}>
+              <div style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--status-success)' }}>
                 {incident.visualPreview?.afterLabel || 'Fixed: Live & Working'}
               </div>
-              <div style={{ fontSize: '11px', color: '#CBD5E1', maxWidth: '280px', lineHeight: 1.4 }}>
+              <div style={{ fontSize: '11.5px', color: 'var(--text-primary)', maxWidth: '280px', lineHeight: 1.4 }}>
                 {incident.visualPreview?.fixedStateDescription || 'Issue resolved cleanly without regression.'}
               </div>
             </div>
           )}
         </div>
 
-        {/* Human context explanation */}
-        <div style={{ fontSize: '11px', color: '#94A3B8', lineHeight: 1.5, background: 'var(--bg-card-secondary)', padding: '10px 12px', borderRadius: '8px', borderLeft: '3px solid var(--iqoo-orange)' }}>
-          💡 <strong style={{ color: '#FFF' }}>Why this matters to users:</strong> {incident.impactAnalysis}
+        {/* Impact Note */}
+        <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', lineHeight: 1.5, background: 'var(--bg-surface-raised)', padding: '8px 10px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
+          <strong style={{ color: 'var(--text-primary)' }}>Customer Impact:</strong> {incident.impactAnalysis}
         </div>
       </div>
     </div>

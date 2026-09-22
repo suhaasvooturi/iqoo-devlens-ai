@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Wifi, BatteryMedium } from 'lucide-react';
+import { Wifi, Battery } from 'lucide-react';
 
 interface PhoneFrameProps {
   children: React.ReactNode;
@@ -23,49 +23,44 @@ export const PhoneFrame: React.FC<PhoneFrameProps> = ({ children }) => {
   return (
     <div className="phone-viewport-wrapper">
       <div className="phone-hardware-frame">
-        {/* Hardware volume rocker & power key */}
-        <div className="phone-volume-rocker" />
-        <div className="phone-power-button" />
-
         {/* Screen */}
         <div className="phone-screen">
-          {/* Top Status Bar */}
+          {/* Authentic Minimal Status Bar */}
           <div className="phone-status-bar">
             <span>{currentTime}</span>
 
-            {/* Centered front camera punch hole */}
+            {/* Subtle Front Camera */}
             <div className="camera-punch-hole" />
 
             <div className="phone-status-icons">
-              <span className="monster-mode-badge">MONSTER</span>
-              <span style={{ fontSize: '10px', color: 'var(--cyber-cyan)', fontFamily: 'var(--font-mono)' }}>5G</span>
-              <Wifi size={12} />
-              <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
-                <BatteryMedium size={14} color="var(--status-success)" />
-                <span style={{ fontSize: '9px' }}>98%</span>
+              <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>5G</span>
+              <Wifi size={12} color="var(--text-secondary)" />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+                <Battery size={13} color="var(--text-secondary)" />
+                <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>98%</span>
               </div>
             </div>
           </div>
 
-          {/* Phone Inner Interactive Content */}
+          {/* Screen Content */}
           <div className="phone-content">{children}</div>
 
-          {/* Bottom Home Pill */}
+          {/* Bottom Home Indicator */}
           <div
             style={{
-              height: '18px',
+              height: '14px',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
               marginTop: 'auto',
-              paddingBottom: '4px',
+              paddingBottom: '2px',
             }}
           >
             <div
               style={{
-                width: '120px',
-                height: '4px',
-                background: 'rgba(255, 255, 255, 0.3)',
+                width: '100px',
+                height: '3px',
+                background: 'rgba(255, 255, 255, 0.25)',
                 borderRadius: '2px',
               }}
             />

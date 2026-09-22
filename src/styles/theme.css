@@ -1,50 +1,65 @@
 :root {
-  /* Color Palette - iQOO Performance & Cyberpunk */
-  --iqoo-orange: #FF5500;
-  --iqoo-orange-hover: #FF7020;
-  --iqoo-orange-glow: rgba(255, 85, 0, 0.35);
-  --iqoo-orange-subtle: rgba(255, 85, 0, 0.12);
-  
-  --cyber-cyan: #00E5FF;
-  --cyber-cyan-glow: rgba(0, 229, 255, 0.3);
-  --cyber-cyan-subtle: rgba(0, 229, 255, 0.1);
+  /* Modern Clean SaaS Palette (Linear / Vercel / Raycast Style) */
+  --bg-app: #09090B;
+  --bg-surface: #121215;
+  --bg-surface-raised: #18181B;
+  --bg-surface-hover: #222226;
+  --bg-surface-active: #27272A;
 
-  --status-success: #00F59B;
-  --status-success-subtle: rgba(0, 245, 155, 0.12);
-  --status-critical: #FF3366;
-  --status-critical-subtle: rgba(255, 51, 102, 0.14);
-  --status-warning: #FFB800;
-  --status-warning-subtle: rgba(255, 184, 0, 0.12);
+  /* Refined Borders */
+  --border-subtle: rgba(255, 255, 255, 0.07);
+  --border-medium: rgba(255, 255, 255, 0.12);
+  --border-strong: rgba(255, 255, 255, 0.2);
+  --border-focus: #F97316;
 
-  /* Backgrounds & Surfaces */
-  --bg-space: #07090E;
-  --bg-card: #0D111A;
-  --bg-card-secondary: #131824;
-  --bg-card-hover: #192131;
-  --bg-glass: rgba(14, 18, 28, 0.75);
-  --bg-glass-heavy: rgba(10, 13, 20, 0.92);
+  /* Typography Colors */
+  --text-primary: #F4F4F5;
+  --text-secondary: #A1A1AA;
+  --text-muted: #71717A;
+  --text-dim: #52525B;
 
-  /* Borders & Dividers */
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-light: rgba(255, 255, 255, 0.15);
-  --border-orange: rgba(255, 85, 0, 0.4);
-  --border-cyan: rgba(0, 229, 255, 0.4);
+  /* Accent Colors (Purposeful, Not Neon) */
+  --accent-primary: #F97316;
+  --accent-primary-hover: #EA580C;
+  --accent-primary-subtle: rgba(249, 115, 22, 0.1);
+  --accent-primary-border: rgba(249, 115, 22, 0.25);
+
+  /* Status Colors (Subtle & Crisp) */
+  --status-success: #10B981;
+  --status-success-bg: rgba(16, 185, 129, 0.1);
+  --status-success-border: rgba(16, 185, 129, 0.25);
+
+  --status-error: #EF4444;
+  --status-error-bg: rgba(239, 68, 68, 0.1);
+  --status-error-border: rgba(239, 68, 68, 0.25);
+
+  --status-warning: #F59E0B;
+  --status-warning-bg: rgba(245, 158, 11, 0.1);
+  --status-warning-border: rgba(245, 158, 11, 0.25);
+
+  --status-info: #3B82F6;
+  --status-info-bg: rgba(59, 130, 246, 0.1);
+  --status-info-border: rgba(59, 130, 246, 0.25);
 
   /* Typography */
-  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  /* Elevation & Shadows */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
-  --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--border-subtle);
-  --shadow-neon-orange: 0 0 25px rgba(255, 85, 0, 0.35);
-  --shadow-neon-cyan: 0 0 25px rgba(0, 229, 255, 0.35);
+  /* Elevation */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px 0 rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 32px -4px rgba(0, 0, 0, 0.6);
+  --shadow-card: 0 0 0 1px var(--border-subtle), 0 4px 16px -2px rgba(0, 0, 0, 0.5);
 
-  /* Transitions */
-  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Animation */
+  --transition: 0.16s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * {
@@ -56,54 +71,37 @@
 html, body {
   width: 100%;
   height: 100%;
-  background-color: var(--bg-space);
-  color: #E2E8F0;
-  font-family: var(--font-body);
-  font-size: 14px;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 13.5px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-/* Custom High-Tech Scrollbar */
+/* Crisp Clean Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-space);
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--iqoo-orange);
+  background: rgba(255, 255, 255, 0.22);
 }
 
-/* Utility Animations */
-@keyframes pulseGlow {
-  0%, 100% { opacity: 0.4; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.04); }
-}
-
-@keyframes laserScan {
-  0% { top: 0%; opacity: 0.8; }
-  50% { opacity: 1; }
-  100% { top: 96%; opacity: 0.8; }
-}
-
-@keyframes radarSweep {
+/* Clean Spinner */
+@keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
-
-@keyframes neonFlicker {
-  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-    box-shadow: 0 0 15px var(--iqoo-orange-glow);
-  }
-  20%, 24%, 55% {
-    box-shadow: none;
-  }
+.spin {
+  animation: spin 1s linear infinite;
 }

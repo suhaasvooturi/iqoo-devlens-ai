@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { Incident, HotfixCommitResult } from '../../types';
-import { CheckCircle, GitCommit, Play, FileDiff } from 'lucide-react';
+import { Check, GitCommit, Play, GitPullRequest, ShieldCheck } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 interface PatchStudioProps {
@@ -23,76 +23,78 @@ export const PatchStudio: React.FC<PatchStudioProps> = ({
     setTestState('running');
     setTimeout(() => {
       setTestState('passed');
-    }, 1100);
+    }, 800);
   };
 
   const handleDeploy = () => {
-    // Generate a realistic git commit hash
     const randomHex = Math.random().toString(16).substring(2, 9);
     const result: HotfixCommitResult = {
       commitHash: randomHex,
-      branch: 'main',
-      message: `fix(${incident.category.toLowerCase().split('/')[0].trim()}): resolve ${incident.errorType.slice(0, 32)} [DevLens AI]`,
+      branch: incident.devContext?.activeBranch || 'main',
+      message: `fix(${incident.category.toLowerCase().split('/')[0].trim()}): resolve ${incident.errorType.slice(0, 32)}`,
       appliedAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
       filesChanged: 1,
       insertions: 5,
       deletions: 2,
     };
 
-    // Trigger celebration confetti
     try {
       confetti({
-        particleCount: 65,
-        spread: 60,
-        origin: { y: 0.8 },
-        colors: ['#FF5500', '#00E5FF', '#00F59B'],
+        particleCount: 50,
+        spread: 55,
+        origin: { y: 0.85 },
       });
     } catch {
-      // safe fallback
+      // ignore
     }
 
     onDeployHotfix(result);
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-      {/* Diff Header & Tab Toggle */}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      {/* GitHub-style PR Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', fontWeight: 600, color: '#FFFFFF' }}>
-          <FileDiff size={13} color="var(--iqoo-orange)" />
-          <span>Synthesized Git Patch</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <GitPullRequest size={13} color="var(--accent-primary)" />
+          <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-primary)' }}>
+            Hotfix Patch
+          </span>
+          <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+            (+5 -2)
+          </span>
         </div>
 
-        <div style={{ display: 'flex', gap: '4px' }}>
+        <div style={{ display: 'flex', background: 'var(--bg-surface-raised)', borderRadius: 'var(--radius-sm)', padding: '2px' }}>
           <button
             onClick={() => setActiveDiffTab('unified')}
             style={{
-              background: activeDiffTab === 'unified' ? 'var(--bg-card-secondary)' : 'transparent',
-              border: '1px solid',
-              borderColor: activeDiffTab === 'unified' ? 'var(--border-light)' : 'transparent',
-              color: activeDiffTab === 'unified' ? '#FFFFFF' : '#94A3B8',
-              fontSize: '10px',
+              background: activeDiffTab === 'unified' ? 'var(--bg-app)' : 'transparent',
+              border: activeDiffTab === 'unified' ? '1px solid var(--border-subtle)' : 'none',
+              color: activeDiffTab === 'unified' ? 'var(--text-primary)' : 'var(--text-muted)',
+              fontSize: '10.5px',
               padding: '2px 8px',
               borderRadius: '4px',
               cursor: 'pointer',
+              fontWeight: 500,
             }}
           >
-            Unified Diff
+            Diff
           </button>
           <button
             onClick={() => setActiveDiffTab('fixed')}
             style={{
-              background: activeDiffTab === 'fixed' ? 'var(--bg-card-secondary)' : 'transparent',
-              border: '1px solid',
-              borderColor: activeDiffTab === 'fixed' ? 'var(--border-light)' : 'transparent',
-              color: activeDiffTab === 'fixed' ? '#FFFFFF' : '#94A3B8',
-              fontSize: '10px',
+              background: activeDiffTab === 'fixed' ? 'var(--bg-app)' : 'transparent',
+              border: activeDiffTab === 'fixed' ? '1px solid var(--border-subtle)' : 'none',
+              color: activeDiffTab === 'fixed' ? 'var(--text-primary)' : 'var(--text-muted)',
+              fontSize: '10.5px',
               padding: '2px 8px',
               borderRadius: '4px',
               cursor: 'pointer',
+              fontWeight: 500,
             }}
           >
-            Fixed Code
+            Fixed File
           </button>
         </div>
       </div>
@@ -115,29 +117,33 @@ export const PatchStudio: React.FC<PatchStudioProps> = ({
             })}
           </div>
         ) : (
-          <pre style={{ padding: '10px', color: '#CBD5E1', fontSize: '10px', overflowX: 'auto' }}>
+          <pre style={{ padding: '10px', color: 'var(--text-secondary)', fontSize: '11px', overflowX: 'auto' }}>
             <code>{incident.fixedCode}</code>
           </pre>
         )}
       </div>
 
-      {/* Test Verification Sandbox */}
+      {/* GitHub Actions CI Sandbox */}
       <div className="test-sandbox">
         <div className="test-summary-row">
-          <span style={{ fontSize: '11px', fontWeight: 600, color: '#E2E8F0' }}>
-            Automated Test Sandbox
-          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <ShieldCheck size={13} color={testState === 'passed' ? 'var(--status-success)' : 'var(--text-muted)'} />
+            <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-primary)' }}>
+              CI Checks & Test Runner
+            </span>
+          </div>
+
           <span
             style={{
-              fontSize: '10px',
+              fontSize: '11px',
               fontFamily: 'var(--font-mono)',
-              color: testState === 'passed' ? 'var(--status-success)' : 'var(--status-critical)',
-              fontWeight: 700,
+              color: testState === 'passed' ? 'var(--status-success)' : '#F87171',
+              fontWeight: 600,
             }}
           >
             {testState === 'passed'
-              ? `✅ ${incident.testSuite.totalTests}/${incident.testSuite.totalTests} PASSED`
-              : `❌ ${incident.testSuite.passedBefore}/${incident.testSuite.totalTests} PASSED`}
+              ? `All ${incident.testSuite.totalTests} Checks Passed`
+              : `${incident.testSuite.failedBefore} Failing Check`}
           </span>
         </div>
 
@@ -154,8 +160,8 @@ export const PatchStudio: React.FC<PatchStudioProps> = ({
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '6px' }}>
-          <span style={{ fontSize: '10px', color: '#64748B', fontFamily: 'var(--font-mono)' }}>
-            {testState === 'passed' ? 'Regression proof verified' : incident.testSuite.failingTestName.slice(0, 32) + '...'}
+          <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+            {testState === 'passed' ? 'Ready to merge safely' : incident.testSuite.failingTestName.slice(0, 30) + '...'}
           </span>
 
           {testState !== 'passed' && (
@@ -163,29 +169,29 @@ export const PatchStudio: React.FC<PatchStudioProps> = ({
               onClick={handleRunTests}
               disabled={testState === 'running'}
               className="action-btn"
-              style={{ fontSize: '10px', padding: '3px 8px' }}
+              style={{ fontSize: '10.5px', padding: '3px 8px' }}
             >
               <Play size={10} />
-              <span>{testState === 'running' ? 'Verifying...' : 'Run Verification'}</span>
+              <span>{testState === 'running' ? 'Running CI...' : 'Run CI Checks'}</span>
             </button>
           )}
         </div>
       </div>
 
-      {/* 1-Tap Deploy Hotfix Trigger */}
+      {/* Merge / Deploy Button */}
       <button
         className={`deploy-hotfix-btn ${isDeployed ? 'deployed' : ''}`}
         onClick={handleDeploy}
       >
         {isDeployed ? (
           <>
-            <CheckCircle size={16} />
-            <span>Hotfix Pushed to Main ({deployedResult?.commitHash})</span>
+            <Check size={14} />
+            <span>Merged to {deployedResult?.branch} ({deployedResult?.commitHash})</span>
           </>
         ) : (
           <>
-            <GitCommit size={16} />
-            <span>Apply Hotfix & Push to Git</span>
+            <GitCommit size={14} />
+            <span>Approve & Merge Hotfix</span>
           </>
         )}
       </button>

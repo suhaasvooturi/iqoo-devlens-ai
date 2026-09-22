@@ -2,7 +2,7 @@ import React from 'react';
 import type { Incident, AIModelMode, HardwareTelemetry, HotfixCommitResult } from '../../types';
 import { WorkstationView } from '../Workstation/WorkstationView';
 import { PhoneCockpitView } from '../PhoneCockpit/PhoneCockpitView';
-import { ArrowRightLeft } from 'lucide-react';
+import { ArrowLeftRight, Laptop, Smartphone } from 'lucide-react';
 
 interface OfficeKitSplitViewProps {
   incident: Incident;
@@ -27,30 +27,34 @@ export const OfficeKitSplitView: React.FC<OfficeKitSplitViewProps> = ({
 }) => {
   return (
     <div className="split-view-container">
-      {/* Office Kit Dual-Screen Synergy Banner */}
+      {/* Clean Dual-Device Synergy Banner */}
       <div className="office-kit-beam-banner">
-        <div className="beam-line" />
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ background: 'var(--iqoo-orange)', padding: '6px', borderRadius: '8px', color: '#FFF' }}>
-            <ArrowRightLeft size={16} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{ background: 'var(--bg-surface-raised)', border: '1px solid var(--border-subtle)', padding: '6px', borderRadius: 'var(--radius-sm)', color: 'var(--accent-primary)' }}>
+            <ArrowLeftRight size={15} />
           </div>
           <div>
-            <div style={{ fontSize: '13px', fontWeight: 700, color: '#FFFFFF', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span>iQOO Office Kit UltraLink Synergy</span>
-              <span style={{ fontSize: '10px', background: 'rgba(0, 229, 255, 0.15)', color: 'var(--cyber-cyan)', padding: '2px 6px', borderRadius: '4px', border: '1px solid var(--border-cyan)' }}>
-                LATENCY: {telemetry.officeKitLatency}ms
+            <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span>iQOO Office Kit UltraLink</span>
+              <span style={{ fontSize: '10.5px', background: 'var(--status-success-bg)', color: 'var(--status-success)', border: '1px solid var(--status-success-border)', padding: '1px 6px', borderRadius: 'var(--radius-full)', fontWeight: 600 }}>
+                {telemetry.officeKitLatency}ms Local P2P
               </span>
             </div>
-            <div style={{ fontSize: '11px', color: '#94A3B8' }}>
-              Seamless phone-to-laptop dev loop: Trigger 1-tap hotfix on iQOO Phone → Instant git apply & commit on Laptop Workstation.
+            <div style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>
+              Dual-screen developer loop: Review and approve hotfix on phone → Workstation terminal applies git commit instantly.
             </div>
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: '10px', color: '#64748B', textTransform: 'uppercase' }}>Phone Phase</div>
-            <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--iqoo-orange)' }}>Red & Green Light Ready</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', fontSize: '11.5px', color: 'var(--text-muted)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Laptop size={13} />
+            <span>Laptop IDE</span>
+          </div>
+          <span>+</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Smartphone size={13} />
+            <span>Phone Cockpit</span>
           </div>
         </div>
       </div>
@@ -63,7 +67,7 @@ export const OfficeKitSplitView: React.FC<OfficeKitSplitViewProps> = ({
         onResetIncident={onResetIncident}
       />
 
-      {/* Right Column: iQOO Smartphone Cockpit */}
+      {/* Right Column: Mobile Cockpit */}
       <PhoneCockpitView
         incident={incident}
         telemetry={telemetry}

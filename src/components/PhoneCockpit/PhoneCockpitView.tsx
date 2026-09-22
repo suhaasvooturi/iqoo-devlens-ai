@@ -6,7 +6,7 @@ import { DiagnosticCard } from './DiagnosticCard';
 import { PairPilotChat } from './PairPilotChat';
 import { VisualPreview } from './VisualPreview';
 import { PatchStudio } from './PatchStudio';
-import { Scan, BrainCircuit, MessageSquare, Eye, GitPullRequest } from 'lucide-react';
+import { FileText, Camera, MessageSquare, Monitor, GitPullRequest, GitBranch, CheckCircle2, AlertCircle } from 'lucide-react';
 
 interface PhoneCockpitViewProps {
   incident: Incident;
@@ -27,46 +27,59 @@ export const PhoneCockpitView: React.FC<PhoneCockpitViewProps> = ({
   isDeployed,
   deployedResult,
 }) => {
-  const [activeTab, setActiveTab] = useState<'scanner' | 'diagnosis' | 'chat' | 'preview' | 'patch'>('diagnosis');
+  const [activeTab, setActiveTab] = useState<'diagnosis' | 'scanner' | 'chat' | 'preview' | 'patch'>('diagnosis');
 
   const handleScanComplete = () => {
     setTimeout(() => {
       setActiveTab('diagnosis');
-    }, 600);
+    }, 500);
   };
 
   return (
     <PhoneFrame>
-      {/* 5-Pill Humanized Phone Navigation Tabs */}
-      <div
-        className="phone-nav-tabs"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(5, 1fr)',
-          gap: '2px',
-          padding: '2px',
-        }}
-      >
-        <button
-          className={`phone-tab-btn ${activeTab === 'scanner' ? 'active' : ''}`}
-          onClick={() => setActiveTab('scanner')}
-          title="Camera OCR Scanner"
-        >
-          <Scan size={12} />
-          <span>Scan</span>
-        </button>
+      {/* Real Developer Incident Header (Linear/GitHub Mobile style) */}
+      <div className="phone-incident-meta">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <GitBranch size={13} color="var(--text-muted)" />
+          <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-primary)', fontWeight: 500 }}>
+            {incident.devContext?.activeBranch || 'main'}
+          </span>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+          {isDeployed ? (
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: 'var(--status-success)', fontSize: '11px', fontWeight: 600 }}>
+              <CheckCircle2 size={12} />
+              Resolved
+            </span>
+          ) : (
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: '#F87171', fontSize: '11px', fontWeight: 600 }}>
+              <AlertCircle size={12} />
+              Active Incident
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Clean Linear-style Navigation Tabs */}
+      <div className="phone-nav-tabs">
         <button
           className={`phone-tab-btn ${activeTab === 'diagnosis' ? 'active' : ''}`}
           onClick={() => setActiveTab('diagnosis')}
-          title="AI Diagnosis & Voice Briefing"
         >
-          <BrainCircuit size={12} />
-          <span>Intel</span>
+          <FileText size={12} />
+          <span>Overview</span>
+        </button>
+        <button
+          className={`phone-tab-btn ${activeTab === 'scanner' ? 'active' : ''}`}
+          onClick={() => setActiveTab('scanner')}
+        >
+          <Camera size={12} />
+          <span>Scan</span>
         </button>
         <button
           className={`phone-tab-btn ${activeTab === 'chat' ? 'active' : ''}`}
           onClick={() => setActiveTab('chat')}
-          title="Pair Pilot Copilot Chat"
         >
           <MessageSquare size={12} />
           <span>Chat</span>
@@ -74,48 +87,20 @@ export const PhoneCockpitView: React.FC<PhoneCockpitViewProps> = ({
         <button
           className={`phone-tab-btn ${activeTab === 'preview' ? 'active' : ''}`}
           onClick={() => setActiveTab('preview')}
-          title="Visual UI Simulation"
         >
-          <Eye size={12} />
+          <Monitor size={12} />
           <span>UX</span>
         </button>
         <button
           className={`phone-tab-btn ${activeTab === 'patch' ? 'active' : ''}`}
           onClick={() => setActiveTab('patch')}
-          title="Git Diff & 1-Tap Deploy"
         >
           <GitPullRequest size={12} />
           <span>Diff</span>
         </button>
       </div>
 
-      {/* Real-time Hardware & NPU Telemetry Banner */}
-      <div className="phone-telemetry-banner">
-        <div className="telemetry-item">
-          <span className="telemetry-label">Assignee</span>
-          <span className="telemetry-val" style={{ color: 'var(--cyber-cyan)', fontSize: '11px' }}>
-            {(incident.devContext?.assignee || 'Suhas').split(' ')[0]}
-          </span>
-        </div>
-        <div className="telemetry-item">
-          <span className="telemetry-label">Engine</span>
-          <span className="telemetry-val" style={{ fontSize: '10px' }}>
-            {modelMode === 'edge-local' ? 'Qwen NPU' : 'DeepSeek Cloud'}
-          </span>
-        </div>
-        <div className="telemetry-item">
-          <span className="telemetry-label">NPU Speed</span>
-          <span className="telemetry-val" style={{ color: 'var(--iqoo-orange)' }}>
-            {telemetry.npuInferenceSpeed}
-          </span>
-        </div>
-      </div>
-
       {/* Tab Contents */}
-      {activeTab === 'scanner' && (
-        <CameraScanner incident={incident} onScanComplete={handleScanComplete} />
-      )}
-
       {activeTab === 'diagnosis' && (
         <DiagnosticCard
           incident={incident}
@@ -123,6 +108,10 @@ export const PhoneCockpitView: React.FC<PhoneCockpitViewProps> = ({
           onModelModeChange={onModelModeChange}
           telemetry={telemetry}
         />
+      )}
+
+      {activeTab === 'scanner' && (
+        <CameraScanner incident={incident} onScanComplete={handleScanComplete} />
       )}
 
       {activeTab === 'chat' && <PairPilotChat incident={incident} />}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import type { Incident } from '../../types';
-import { Send, Sparkles, Bot } from 'lucide-react';
+import { Send, Bot, Sparkles } from 'lucide-react';
 
 interface PairPilotChatProps {
   incident: Incident;
@@ -19,7 +19,6 @@ export const PairPilotChat: React.FC<PairPilotChatProps> = ({ incident }) => {
   const [isTyping, setIsTyping] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
-  // Initialize chat when incident changes
   useEffect(() => {
     if (incident.copilotChat && incident.copilotChat.length > 0) {
       setMessages(
@@ -61,7 +60,6 @@ export const PairPilotChat: React.FC<PairPilotChatProps> = ({ incident }) => {
     if (!textToSend) setInputText('');
     setIsTyping(true);
 
-    // Simulate thoughtful, human AI response
     setTimeout(() => {
       let aiResponseText = '';
       const lower = text.toLowerCase();
@@ -73,7 +71,7 @@ export const PairPilotChat: React.FC<PairPilotChatProps> = ({ incident }) => {
       } else if (lower.includes('simple') || lower.includes('eli5')) {
         aiResponseText = `In plain English: ${incident.humanSummary}`;
       } else if (lower.includes('push') || lower.includes('deploy')) {
-        aiResponseText = `You can tap the 'Hotfix Diff' tab at the top and hit 'Apply Hotfix & Push to Git'—I'll immediately broadcast it to your laptop and execute the git commit.`;
+        aiResponseText = `You can tap the 'Diff' tab at the top and hit 'Approve & Merge Hotfix'—I'll immediately broadcast it to your laptop workstation.`;
       } else {
         aiResponseText = `Regarding "${text}": I analyzed the AST of ${incident.culpritFile}. With our patch, the execution pipeline remains safe without regressions. Would you like me to run the test suite again?`;
       }
@@ -87,12 +85,12 @@ export const PairPilotChat: React.FC<PairPilotChatProps> = ({ incident }) => {
 
       setIsTyping(false);
       setMessages((prev) => [...prev, aiMsg]);
-    }, 850);
+    }, 750);
   };
 
   const quickPrompts = [
     'Explain in simple terms',
-    'Is this 100% backward compatible?',
+    'Is this backward compatible?',
     'Why did this fail?',
   ];
 
@@ -102,53 +100,49 @@ export const PairPilotChat: React.FC<PairPilotChatProps> = ({ incident }) => {
         display: 'flex',
         flexDirection: 'column',
         height: '490px',
-        background: 'var(--bg-card)',
-        borderRadius: '16px',
+        background: 'var(--bg-surface)',
+        borderRadius: 'var(--radius-lg)',
         border: '1px solid var(--border-subtle)',
         overflow: 'hidden',
       }}
     >
-      {/* Dev Buddy Header */}
+      {/* Clean Dev Header */}
       <div
         style={{
-          padding: '12px 14px',
-          background: 'linear-gradient(135deg, rgba(255, 85, 0, 0.12), rgba(0, 229, 255, 0.08))',
+          padding: '10px 14px',
+          background: 'var(--bg-surface-raised)',
           borderBottom: '1px solid var(--border-subtle)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <div
             style={{
-              width: '32px',
-              height: '32px',
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, #FF5500, #FF2200)',
+              width: '28px',
+              height: '28px',
+              borderRadius: 'var(--radius-sm)',
+              background: 'var(--accent-primary)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               color: '#FFF',
-              boxShadow: '0 0 10px var(--iqoo-orange-glow)',
             }}
           >
-            <Bot size={18} />
+            <Bot size={15} />
           </div>
           <div>
-            <div style={{ fontSize: '13px', fontWeight: 700, color: '#FFFFFF', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span>Pair Pilot</span>
-              <span style={{ fontSize: '9px', background: 'rgba(0, 245, 155, 0.2)', color: 'var(--status-success)', padding: '1px 5px', borderRadius: '4px' }}>
-                LIVE
-              </span>
+            <div style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--text-primary)' }}>
+              Pair Pilot
             </div>
-            <div style={{ fontSize: '10px', color: '#94A3B8' }}>
-              Your on-device senior engineer companion
+            <div style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>
+              On-Device Engineer Assistant
             </div>
           </div>
         </div>
 
-        <div style={{ fontSize: '10px', color: 'var(--cyber-cyan)', fontFamily: 'var(--font-mono)' }}>
+        <div style={{ fontSize: '11px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
           {(incident.devContext?.assignee || 'Suhas').split(' ')[0]}
         </div>
       </div>
@@ -157,11 +151,11 @@ export const PairPilotChat: React.FC<PairPilotChatProps> = ({ incident }) => {
       <div
         style={{
           flex: 1,
-          padding: '14px',
+          padding: '12px',
           overflowY: 'auto',
           display: 'flex',
           flexDirection: 'column',
-          gap: '12px',
+          gap: '10px',
         }}
       >
         {messages.map((m) => {
@@ -173,25 +167,24 @@ export const PairPilotChat: React.FC<PairPilotChatProps> = ({ incident }) => {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: isUser ? 'flex-end' : 'flex-start',
-                gap: '4px',
+                gap: '3px',
               }}
             >
               <div
                 style={{
                   maxWidth: '85%',
-                  padding: '10px 12px',
-                  borderRadius: isUser ? '14px 14px 2px 14px' : '14px 14px 14px 2px',
-                  background: isUser ? 'var(--iqoo-orange)' : 'var(--bg-card-secondary)',
+                  padding: '8px 12px',
+                  borderRadius: isUser ? '12px 12px 2px 12px' : '12px 12px 12px 2px',
+                  background: isUser ? 'var(--accent-primary)' : 'var(--bg-surface-raised)',
                   border: isUser ? 'none' : '1px solid var(--border-subtle)',
-                  color: isUser ? '#FFFFFF' : '#E2E8F0',
-                  fontSize: '11.5px',
+                  color: isUser ? '#FFFFFF' : 'var(--text-primary)',
+                  fontSize: '12px',
                   lineHeight: '1.5',
-                  boxShadow: isUser ? '0 4px 12px var(--iqoo-orange-glow)' : 'none',
                 }}
               >
                 {m.text}
               </div>
-              <span style={{ fontSize: '9px', color: '#64748B', padding: '0 4px' }}>
+              <span style={{ fontSize: '9.5px', color: 'var(--text-dim)', padding: '0 2px' }}>
                 {m.time}
               </span>
             </div>
@@ -199,8 +192,8 @@ export const PairPilotChat: React.FC<PairPilotChatProps> = ({ incident }) => {
         })}
 
         {isTyping && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#94A3B8', fontSize: '11px' }}>
-            <Sparkles size={12} className="spin" color="var(--iqoo-orange)" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)', fontSize: '11px' }}>
+            <Sparkles size={11} className="spin" color="var(--accent-primary)" />
             <span>Pair Pilot is typing...</span>
           </div>
         )}
@@ -210,11 +203,11 @@ export const PairPilotChat: React.FC<PairPilotChatProps> = ({ incident }) => {
       {/* Quick Prompt Chips */}
       <div
         style={{
-          padding: '6px 12px',
+          padding: '6px 10px',
           display: 'flex',
           gap: '6px',
           overflowX: 'auto',
-          background: 'rgba(10, 13, 20, 0.6)',
+          background: 'var(--bg-app)',
           borderTop: '1px solid var(--border-subtle)',
         }}
       >
@@ -223,12 +216,12 @@ export const PairPilotChat: React.FC<PairPilotChatProps> = ({ incident }) => {
             key={idx}
             onClick={() => handleSendMessage(q)}
             style={{
-              background: 'var(--bg-card-secondary)',
-              border: '1px solid var(--border-light)',
-              color: '#CBD5E1',
-              fontSize: '10px',
-              padding: '4px 8px',
-              borderRadius: '12px',
+              background: 'var(--bg-surface-raised)',
+              border: '1px solid var(--border-subtle)',
+              color: 'var(--text-secondary)',
+              fontSize: '10.5px',
+              padding: '3px 8px',
+              borderRadius: 'var(--radius-full)',
               cursor: 'pointer',
               whiteSpace: 'nowrap',
             }}
@@ -241,17 +234,17 @@ export const PairPilotChat: React.FC<PairPilotChatProps> = ({ incident }) => {
       {/* Input Box */}
       <div
         style={{
-          padding: '10px',
-          background: '#090C12',
+          padding: '8px 10px',
+          background: 'var(--bg-surface-raised)',
           borderTop: '1px solid var(--border-subtle)',
           display: 'flex',
-          gap: '8px',
+          gap: '6px',
           alignItems: 'center',
         }}
       >
         <input
           type="text"
-          placeholder="Ask Pair Pilot anything..."
+          placeholder="Ask Pair Pilot a question..."
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           onKeyDown={(e) => {
@@ -259,32 +252,31 @@ export const PairPilotChat: React.FC<PairPilotChatProps> = ({ incident }) => {
           }}
           style={{
             flex: 1,
-            background: 'var(--bg-card)',
+            background: 'var(--bg-app)',
             border: '1px solid var(--border-subtle)',
-            borderRadius: '20px',
-            padding: '8px 14px',
-            color: '#FFFFFF',
-            fontSize: '11px',
+            borderRadius: 'var(--radius-md)',
+            padding: '6px 10px',
+            color: 'var(--text-primary)',
+            fontSize: '11.5px',
             outline: 'none',
           }}
         />
         <button
           onClick={() => handleSendMessage()}
           style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '50%',
-            background: 'var(--iqoo-orange)',
+            width: '28px',
+            height: '28px',
+            borderRadius: 'var(--radius-sm)',
+            background: 'var(--accent-primary)',
             border: 'none',
             color: '#FFFFFF',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'pointer',
-            boxShadow: '0 0 10px var(--iqoo-orange-glow)',
           }}
         >
-          <Send size={13} />
+          <Send size={12} />
         </button>
       </div>
     </div>

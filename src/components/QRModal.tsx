@@ -24,8 +24,8 @@ export const QRModal: React.FC<QRModalProps> = ({ isOpen, onClose }) => {
       style={{
         position: 'fixed',
         inset: 0,
-        background: 'rgba(5, 7, 12, 0.85)',
-        backdropFilter: 'blur(12px)',
+        background: 'rgba(0, 0, 0, 0.75)',
+        backdropFilter: 'blur(8px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -35,13 +35,13 @@ export const QRModal: React.FC<QRModalProps> = ({ isOpen, onClose }) => {
     >
       <div
         style={{
-          background: 'var(--bg-card)',
-          border: '1px solid var(--border-orange)',
-          borderRadius: '20px',
-          padding: '28px',
-          maxWidth: '420px',
+          background: 'var(--bg-surface)',
+          border: '1px solid var(--border-medium)',
+          borderRadius: 'var(--radius-xl)',
+          padding: '24px',
+          maxWidth: '400px',
           width: '90%',
-          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px var(--iqoo-orange-glow)',
+          boxShadow: 'var(--shadow-lg)',
           position: 'relative',
         }}
         onClick={(e) => e.stopPropagation()}
@@ -54,47 +54,47 @@ export const QRModal: React.FC<QRModalProps> = ({ isOpen, onClose }) => {
             right: '16px',
             background: 'transparent',
             border: 'none',
-            color: '#94A3B8',
+            color: 'var(--text-muted)',
             cursor: 'pointer',
           }}
         >
-          <X size={18} />
+          <X size={16} />
         </button>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-          <div style={{ background: 'var(--iqoo-orange)', padding: '6px', borderRadius: '8px', color: '#FFF' }}>
-            <Smartphone size={18} />
+          <div style={{ background: 'var(--bg-surface-raised)', border: '1px solid var(--border-subtle)', padding: '6px', borderRadius: 'var(--radius-sm)', color: 'var(--accent-primary)' }}>
+            <Smartphone size={16} />
           </div>
           <div>
-            <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#FFFFFF' }}>Connect Physical Phone</h3>
-            <p style={{ fontSize: '11px', color: '#94A3B8' }}>iQOO Office Kit Cross-Device Synergy</p>
+            <h3 style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text-primary)' }}>Connect Smartphone</h3>
+            <p style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>iQOO Office Kit Local Pairing</p>
           </div>
         </div>
 
-        {/* High-Tech QR Code Display */}
+        {/* Clean High-Contrast QR Code */}
         <div
           style={{
             background: '#FFFFFF',
-            borderRadius: '14px',
+            borderRadius: 'var(--radius-lg)',
             padding: '16px',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            marginBottom: '18px',
+            marginBottom: '16px',
           }}
         >
-          <svg width="180" height="180" viewBox="0 0 100 100" fill="#000000">
+          <svg width="170" height="170" viewBox="0 0 100 100" fill="#000000">
             <rect x="5" y="5" width="28" height="28" fill="#000" />
             <rect x="9" y="9" width="20" height="20" fill="#fff" />
-            <rect x="13" y="13" width="12" height="12" fill="#FF5500" />
+            <rect x="13" y="13" width="12" height="12" fill="#F97316" />
 
             <rect x="67" y="5" width="28" height="28" fill="#000" />
             <rect x="71" y="9" width="20" height="20" fill="#fff" />
-            <rect x="75" y="13" width="12" height="12" fill="#FF5500" />
+            <rect x="75" y="13" width="12" height="12" fill="#F97316" />
 
             <rect x="5" y="67" width="28" height="28" fill="#000" />
             <rect x="9" y="71" width="20" height="20" fill="#fff" />
-            <rect x="13" y="75" width="12" height="12" fill="#FF5500" />
+            <rect x="13" y="75" width="12" height="12" fill="#F97316" />
 
             <rect x="38" y="8" width="5" height="5" />
             <rect x="48" y="12" width="5" height="5" />
@@ -102,7 +102,7 @@ export const QRModal: React.FC<QRModalProps> = ({ isOpen, onClose }) => {
             <rect x="54" y="22" width="4" height="4" />
             <rect x="8" y="42" width="6" height="6" />
             <rect x="22" y="46" width="5" height="5" />
-            <rect x="38" y="40" width="8" height="8" fill="#FF5500" />
+            <rect x="38" y="40" width="8" height="8" fill="#F97316" />
             <rect x="52" y="44" width="7" height="7" />
             <rect x="68" y="42" width="5" height="5" />
             <rect x="82" y="46" width="6" height="6" />
@@ -115,23 +115,23 @@ export const QRModal: React.FC<QRModalProps> = ({ isOpen, onClose }) => {
           </svg>
         </div>
 
-        <div style={{ background: '#090C12', padding: '10px 14px', borderRadius: '10px', border: '1px solid var(--border-subtle)', marginBottom: '16px' }}>
-          <div style={{ fontSize: '10px', color: '#64748B', textTransform: 'uppercase', marginBottom: '4px' }}>Local Network URL</div>
+        <div style={{ background: 'var(--bg-app)', padding: '10px 12px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)', marginBottom: '14px' }}>
+          <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', marginBottom: '3px' }}>Local Network Address</div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--cyber-cyan)', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--text-primary)', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {currentUrl}
             </span>
             <button
               onClick={handleCopy}
-              style={{ background: 'transparent', border: 'none', color: '#CBD5E1', cursor: 'pointer' }}
+              style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}
             >
-              {copied ? <Check size={14} color="#00F59B" /> : <Copy size={14} />}
+              {copied ? <Check size={14} color="var(--status-success)" /> : <Copy size={14} />}
             </button>
           </div>
         </div>
 
-        <div style={{ fontSize: '11px', color: '#94A3B8', lineHeight: 1.5 }}>
-          💡 <strong style={{ color: '#FFF' }}>Hackathon Demo Tip:</strong> Scan this with any phone on the same Wi-Fi network to control your laptop terminal and deploy hotfixes with 1-tap!
+        <div style={{ fontSize: '11px', color: 'var(--text-muted)', lineHeight: 1.45 }}>
+          Scan with your smartphone camera to test phone-first debugging and hotfix approval on mobile.
         </div>
       </div>
     </div>

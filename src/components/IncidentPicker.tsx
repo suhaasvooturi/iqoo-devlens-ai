@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import type { Incident } from '../types';
 import { INCIDENT_PRESETS } from '../data/incidentPresets';
 import { parseCustomErrorLog } from '../services/aiDiagnosticEngine';
-import { Plus, Sparkles, FileCode, Flame } from 'lucide-react';
+import { Plus, Terminal } from 'lucide-react';
 
 interface IncidentPickerProps {
   currentIncident: Incident;
@@ -28,8 +28,8 @@ export const IncidentPicker: React.FC<IncidentPickerProps> = ({
   return (
     <div className="incident-bar">
       <div className="incident-bar-title">
-        <Flame size={16} color="var(--iqoo-orange)" />
-        <span>Failure Presets & Telemetry Ingestion:</span>
+        <Terminal size={14} color="var(--text-secondary)" />
+        <span>Incidents & Stack Traces:</span>
       </div>
 
       <div className="presets-container">
@@ -41,10 +41,9 @@ export const IncidentPicker: React.FC<IncidentPickerProps> = ({
               className={`preset-chip ${isActive ? 'active' : ''}`}
               onClick={() => onSelectIncident(preset)}
             >
-              <FileCode size={13} />
               <span>{preset.framework.split('/')[0].trim()}</span>
               <span style={{ opacity: 0.6, fontSize: '11px' }}>
-                ({preset.category.split('/')[0].trim()})
+                · {preset.category.split('/')[0].trim()}
               </span>
             </button>
           );
@@ -52,31 +51,31 @@ export const IncidentPicker: React.FC<IncidentPickerProps> = ({
 
         <button
           className="preset-chip"
-          style={{ borderStyle: 'dashed', borderColor: 'var(--border-light)' }}
+          style={{ borderStyle: 'dashed' }}
           onClick={() => setIsCustomOpen(!isCustomOpen)}
         >
-          <Plus size={13} />
-          <span>Paste Custom Error</span>
+          <Plus size={12} />
+          <span>Custom Trace</span>
         </button>
       </div>
 
       {isCustomOpen && (
-        <div style={{ width: '100%', marginTop: '10px', animation: 'pulseGlow 0.3s' }}>
+        <div style={{ width: '100%', marginTop: '6px' }}>
           <form onSubmit={handleCustomSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <textarea
               rows={3}
-              placeholder="Paste terminal stack trace, compiler panic, or runtime exception here..."
+              placeholder="Paste terminal error, compiler panic, or exception stack trace..."
               value={customErrorInput}
               onChange={(e) => setCustomErrorInput(e.target.value)}
               style={{
                 width: '100%',
-                background: '#07090F',
-                border: '1px solid var(--border-orange)',
-                borderRadius: '8px',
-                padding: '10px',
-                color: '#E2E8F0',
+                background: 'var(--bg-app)',
+                border: '1px solid var(--border-medium)',
+                borderRadius: 'var(--radius-md)',
+                padding: '10px 12px',
+                color: 'var(--text-primary)',
                 fontFamily: 'var(--font-mono)',
-                fontSize: '11px',
+                fontSize: '11.5px',
                 outline: 'none',
               }}
             />
@@ -91,10 +90,9 @@ export const IncidentPicker: React.FC<IncidentPickerProps> = ({
               <button
                 type="submit"
                 className="scan-trigger-btn"
-                style={{ padding: '6px 16px', fontSize: '11px' }}
+                style={{ width: 'auto', padding: '5px 14px', fontSize: '11.5px' }}
               >
-                <Sparkles size={13} />
-                Ingest & Diagnose
+                Parse & Inspect
               </button>
             </div>
           </form>

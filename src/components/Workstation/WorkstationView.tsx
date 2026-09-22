@@ -34,8 +34,8 @@ export const WorkstationView: React.FC<WorkstationViewProps> = ({
       `[FAIL] ${incident.testSuite.failingTestName}`,
       incident.rawLog,
       `Tests: ${incident.testSuite.failedBefore} failed, ${incident.testSuite.passedBefore} passed, ${incident.testSuite.totalTests} total`,
-      `💥 Build pipeline exited with code 1`,
-      `devlens-sentinel: incident alert broadcasted to iQOO Office Kit bridge.`,
+      `process exited with code 1`,
+      `office-kit-bridge: broadcasted failure to mobile companion (<2.4ms)`,
     ]);
   }, [incident]);
 
@@ -50,21 +50,24 @@ export const WorkstationView: React.FC<WorkstationViewProps> = ({
         `[${deployedResult.branch} ${deployedResult.commitHash}] ${deployedResult.message}`,
         ` ${deployedResult.filesChanged} file changed, ${deployedResult.insertions} insertions(+), ${deployedResult.deletions} deletions(-)`,
         `$ git push origin ${deployedResult.branch}`,
-        `To github.com:iqoo-org/devtools.git`,
+        `To github.com:suhaasvooturi/iqoo-devlens-ai.git`,
         `   e82a10c..${deployedResult.commitHash}  ${deployedResult.branch} -> ${deployedResult.branch}`,
         `$ ${incident.testSuite.name}`,
         `PASS ${incident.culpritFile}`,
-        `✅ All ${incident.testSuite.totalTests} tests passed in 0.42s. 0 regressions.`,
-        `🚀 Hotfix verified and live in production!`,
+        `✅ All ${incident.testSuite.totalTests} checks passing (0 regressions)`,
+        `Deployment complete.`,
       ];
 
       deployLogs.forEach((log, index) => {
         setTimeout(() => {
           setTerminalLogs((prev) => [...prev, log]);
-        }, index * 120);
+        }, index * 100);
       });
     }
   }, [isDeployed, deployedResult, incident]);
+
+  const activeCode = isDeployed ? incident.fixedCode : incident.originalCode;
+  const codeLines = activeCode.split('\n');
 
   return (
     <div className="workstation-container">
@@ -80,8 +83,8 @@ export const WorkstationView: React.FC<WorkstationViewProps> = ({
           <div className="window-title">
             <span>iqoo-workstation — </span>
             <GitBranch size={12} style={{ display: 'inline', margin: '0 4px' }} />
-            <span style={{ color: isDeployed ? 'var(--status-success)' : 'var(--iqoo-orange)' }}>
-              main {isDeployed ? `(${deployedResult?.commitHash})` : '• uncommitted changes'}
+            <span style={{ color: isDeployed ? 'var(--status-success)' : 'var(--accent-primary)' }}>
+              {incident.devContext?.activeBranch || 'main'} {isDeployed ? `(${deployedResult?.commitHash})` : '• uncommitted changes'}
             </span>
           </div>
 
@@ -89,11 +92,11 @@ export const WorkstationView: React.FC<WorkstationViewProps> = ({
             <button
               onClick={onResetIncident}
               className="action-btn"
-              style={{ fontSize: '11px', padding: '3px 8px' }}
-              title="Reset incident state"
+              style={{ fontSize: '11px', padding: '2px 8px' }}
+              title="Reset state"
             >
               <RotateCcw size={11} />
-              <span>Reset State</span>
+              <span>Reset</span>
             </button>
           </div>
         </div>
@@ -102,13 +105,13 @@ export const WorkstationView: React.FC<WorkstationViewProps> = ({
         <div className="workstation-grid">
           {/* File Tree Pane */}
           <div className="file-tree-pane">
-            <div className="tree-header">Repository Files</div>
+            <div className="tree-header">Explorer</div>
             <div className="tree-item">
-              <Folder size={13} color="var(--iqoo-orange)" />
+              <Folder size={13} color="var(--accent-primary)" />
               <span>src/</span>
             </div>
             <div className="tree-item" style={{ paddingLeft: '18px' }}>
-              <Folder size={13} color="#64748B" />
+              <Folder size={13} color="var(--text-muted)" />
               <span>components/</span>
             </div>
             <div
@@ -117,14 +120,14 @@ export const WorkstationView: React.FC<WorkstationViewProps> = ({
             >
               <FileCode size={13} />
               <span>{incident.culpritFile.split('/').pop()}</span>
-              {!isDeployed && <AlertCircle size={11} color="var(--status-critical)" />}
+              {!isDeployed && <AlertCircle size={11} color="var(--status-error)" />}
             </div>
             <div className="tree-item" style={{ paddingLeft: '28px' }}>
               <FileCode size={13} />
               <span>Navbar.test.tsx</span>
             </div>
             <div className="tree-item" style={{ paddingLeft: '18px' }}>
-              <Folder size={13} color="#64748B" />
+              <Folder size={13} color="var(--text-muted)" />
               <span>services/</span>
             </div>
             <div className="tree-item" style={{ paddingLeft: '28px' }}>
@@ -142,47 +145,54 @@ export const WorkstationView: React.FC<WorkstationViewProps> = ({
             {/* Editor Tab Bar */}
             <div className="editor-tab-bar">
               <div className="editor-tab active">
-                <FileCode size={13} color={isDeployed ? 'var(--status-success)' : 'var(--iqoo-orange)'} />
+                <FileCode size={13} color={isDeployed ? 'var(--status-success)' : 'var(--accent-primary)'} />
                 <span>{incident.culpritFile.split('/').pop()}</span>
                 {isDeployed && (
-                  <span style={{ fontSize: '9px', color: 'var(--status-success)', fontWeight: 700 }}>
-                    [HOTFIXED]
+                  <span style={{ fontSize: '10px', color: 'var(--status-success)', fontWeight: 600 }}>
+                    [MODIFIED & PASSED]
                   </span>
                 )}
               </div>
             </div>
 
-            {/* Code Editor */}
+            {/* Code Editor with Line Numbers */}
             <div className="code-editor-section">
               {isDeployed ? (
-                <div style={{ marginBottom: '12px', padding: '8px 12px', background: 'rgba(0, 245, 155, 0.1)', border: '1px solid var(--status-success)', borderRadius: '6px', color: '#00F59B', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <CheckCircle2 size={14} />
-                  <span>Patch applied successfully via iQOO Office Kit Bridge. Test suite passed cleanly.</span>
+                <div style={{ marginBottom: '10px', padding: '6px 10px', background: 'var(--status-success-bg)', border: '1px solid var(--status-success-border)', borderRadius: 'var(--radius-sm)', color: 'var(--status-success)', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <CheckCircle2 size={13} />
+                  <span>Patch merged cleanly from mobile companion. All checks passing.</span>
                 </div>
               ) : (
-                <div style={{ marginBottom: '12px', padding: '8px 12px', background: 'rgba(255, 51, 102, 0.1)', border: '1px solid var(--status-critical)', borderRadius: '6px', color: '#FF5577', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <AlertCircle size={14} />
-                  <span>Failure detected at line {incident.culpritLine}. Sentinel broadcasted stack trace to phone.</span>
+                <div style={{ marginBottom: '10px', padding: '6px 10px', background: 'var(--status-error-bg)', border: '1px solid var(--status-error-border)', borderRadius: 'var(--radius-sm)', color: '#F87171', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <AlertCircle size={13} />
+                  <span>Exception at line {incident.culpritLine}. Stack trace transmitted to iQOO phone companion.</span>
                 </div>
               )}
 
-              <pre style={{ margin: 0 }}>
-                <code>{isDeployed ? incident.fixedCode : incident.originalCode}</code>
-              </pre>
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <div style={{ userSelect: 'none', color: 'var(--text-dim)', textAlign: 'right', fontFamily: 'var(--font-mono)' }}>
+                  {codeLines.map((_, i) => (
+                    <div key={i}>{i + 1}</div>
+                  ))}
+                </div>
+                <pre style={{ margin: 0, overflowX: 'auto', flex: 1 }}>
+                  <code>{activeCode}</code>
+                </pre>
+              </div>
             </div>
 
-            {/* Live Terminal Output */}
+            {/* Terminal Output */}
             <div className="terminal-section">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px', color: '#64748B' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px', color: 'var(--text-muted)' }}>
                 <TerminalIcon size={12} />
-                <span style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
-                  Integrated Workstation Terminal (zsh)
+                <span style={{ fontSize: '10.5px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                  Terminal — zsh
                 </span>
               </div>
 
               {terminalLogs.map((line, idx) => {
-                const isErr = line.includes('FAIL') || line.includes('Error') || line.includes('Traceback') || line.includes('exit code 1');
-                const isSuccess = line.includes('PASS') || line.includes('Hotfix verified') || line.includes('All') || line.includes('Ready');
+                const isErr = line.includes('FAIL') || line.includes('Error') || line.includes('Traceback') || line.includes('code 1');
+                const isSuccess = line.includes('PASS') || line.includes('passing') || line.includes('complete');
                 const isPrompt = line.startsWith('$');
                 return (
                   <div
