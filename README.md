@@ -1,99 +1,93 @@
-# DevLens AI ⚡
-### Phone-First Developer Sentinel, Stack Trace Debugger & Automated Git Hotfix Studio
-> **Built for the iQOO Hackathon 2026 — Developer Tools Track**  
+# DevPilot — AI Developer Toolkit ⚡
+### Modern AI-Powered Engineering Suite & Phone-First Dev Sentinel
+> **Unified Developer Toolkit for High-Velocity Engineering & iQOO Hackathon 2026**  
 > *"Build tools that help developers create, test, deploy, or collaborate faster using AI"*
 
 ---
 
-![DevLens AI Architecture](https://img.shields.io/badge/iQOO_Hackathon-2026_Developer_Tools-FF5500?style=for-the-badge&logo=android)
+![DevPilot Banner](https://img.shields.io/badge/DevPilot-AI_Developer_Toolkit-00E5FF?style=for-the-badge&logo=codeforces&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![React 19](https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![Vite](https://img.shields.io/badge/Vite_8-646CFF?style=for-the-badge&logo=vite&logoColor=white)
-![On-Device NPU](https://img.shields.io/badge/Edge_AI-Qwen2.5_Coder_(4--bit_NPU)-00E5FF?style=for-the-badge)
+![Vite 8](https://img.shields.io/badge/Vite_8-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![Linear/Raycast Design](https://img.shields.io/badge/Design-Linear%20%2F%20Raycast%20Minimalist-10141D?style=for-the-badge)
 
 ---
 
-## 💡 The Problem
-During development sprints and on-call rotations, debugging compiler panics, SSR hydration mismatches, and deadlocks is agonizing:
-- **Context Switching**: Developers constantly jump between IDE, logs, terminal, and browser debugger.
-- **Mobile Disconnection**: When away from their laptop or during the hackathon's "Red Light" phone-only phase, devs cannot easily inspect failures or execute verified fixes.
-- **Robotic AI Tools**: Generic code assistants dump walls of robotic academic jargon without empathetic developer context or test verification.
+## 🚀 Overview
 
-## 🚀 The Solution: DevLens AI
-**DevLens AI** turns your iQOO smartphone into an intelligent secondary monitor, terminal monitor, and remote hotfix pilot.
+**DevPilot** is an all-in-one developer productivity suite designed to eliminate context-switching and supercharge software development workflows. Instead of juggling dozens of fragmented single-purpose tools, DevPilot unifies 9 essential developer utilities into a sleek, keyboard-driven interface (Linear/Vercel/Raycast aesthetic) with instant pre-loaded examples and persistent history.
 
-1. **Point & Scan**: Point your phone camera at your laptop screen or monitor — the laser HUD uses OCR to extract terminal errors, stack traces, and offending line numbers.
-2. **Senior Dev Intel & Voice Briefing**: Delivers a warm, senior-engineer breakdown with a 1-tap **"Audio Briefing"** that speaks the issue and fix recommendations aloud via on-device speech synthesis.
-3. **Interactive "Pair Pilot" Companion**: A dedicated chat tab where you can ask *"Why did this fail?"*, *"Will this break backward compatibility?"*, or *"Explain in simple terms"*.
-4. **Live UX Impact Simulation**: Visual before-and-after view showing what users actually saw (*Red Error Crash Screen* vs. *Live Working Navbar*).
-5. **1-Tap Git Hotfix & Push**: Synthesizes a unified git patch, verifies it in an automated test sandbox, and pushes the commit directly to your laptop repository in under 30 seconds!
+DevPilot also features **DevLens Sentinel** — an on-device phone cockpit with camera OCR error scanning, audio voice briefings, and real-time dual-screen sync with your laptop workstation.
 
 ---
 
-## 🏆 How DevLens AI Nails the iQOO Hackathon Judging Criteria
+## 🛠️ The 9 Developer Tools
 
-| Hackathon Criterion | DevLens AI Implementation | Winning Advantage |
-| :--- | :--- | :--- |
-| **Phone-First Build Experience** | Complete mobile cockpit optimized for one-hand operation during "Red Light" phases. Scan monitors with camera OCR or stream logs over Wi-Fi. | Eliminates context-switching; dev continues seamlessly on phone. |
-| **iQOO Office Kit Synergy** | Real-time dual-screen peer sync between laptop workstation and iQOO phone via `BroadcastChannel` UltraLink (`<2.5ms` latency). | 1-tap on phone immediately applies git patch and re-runs tests on the laptop. |
-| **Local / Edge Open-Source AI** | On-device quantized model fallback (`Qwen2.5-Coder 1.5B 4-bit NPU` at `28.6 tokens/s`), with optional toggle to cloud deep reasoning (`DeepSeek / Gemini`). | **Earns key bonus points** for on-device & open-source AI integration. |
-| **Developer Productivity Impact** | Slashes Mean Time to Resolution (MTTR) from 15+ minutes of manual debugging to under 30 seconds: **Scan → Diagnose → Test → Hotfix**. | Measurable, real-world productivity multiplier for dev teams. |
-
----
-
-## 📱 The 5 Phone Cockpit Tabs
-
-- **1. Scan (Sentinel)**: Animated laser HUD viewfinder with targeting brackets and bounding boxes identifying target files and line numbers.
-- **2. Intel (Diagnosis & Audio)**:
-  - Error classification and severity gauge (1-10)
-  - **🔊 Audio Voice Briefing**: Native Web Speech Synthesis reading the diagnosis out loud
-  - **Senior Engineer Breakdown**: Conversational, practical explanation
-  - **Engine Selector**: Toggle between Local Qwen (NPU) and DeepSeek Cloud
-- **3. Chat (Pair Pilot)**:
-  - Live conversational coding companion with instant friendly answers and prompt chips
-- **4. UX (Visual Preview)**:
-  - Real-world before-and-after impact simulation (Broken UI vs. Fixed UI)
-- **5. Diff (Hotfix & Tests)**:
-  - Syntax-highlighted unified/split git diff
-  - Automated test runner sandbox (`FAIL 1` → `PASS 12/12`)
-  - **1-Tap Hotfix Button**: Triggers celebration confetti and pushes commit to git
+| Tool | Icon | Description | Key Capabilities |
+| :--- | :---: | :--- | :--- |
+| **Developer Dashboard** | 💻 | Unified command center | Real-time statistics, quick launch tiles, persistent analysis history stream, local cache management. |
+| **AI Debugger** | 🐛 | Root cause analysis & hotfix diff | Dual-pane Code + Error trace input, identifies culprit lines, generates git diff and copy-ready fixed code. |
+| **Code Explainer** | 🔍 | Multi-level logic deconstruction | Executive summary, interactive line-by-line code walk, and ELI5 (Explain Like I'm 5) analogies. |
+| **Code Optimizer** | ⚡ | Performance & algorithmic tuning | Detects quadratic/exponential bottlenecks, calculates speedup % and memory savings, outputs O(1) Set/Map refactors. |
+| **Test Generator** | 🧪 | Multi-framework unit test suite | Generates test cases for **Vitest/Jest, Pytest, JUnit 5, Go testing, Cargo test** with happy paths and edge cases. |
+| **Security Scanner** | 🔐 | OWASP & vulnerability detection | Scans for SQLi, XSS, command injection, insecure eval, maps CWE codes, severity badges, and remediation diffs. |
+| **Complexity Analyzer** | 📊 | Big-O asymptotic evaluation | Calculates Big-O Time & Space complexity, visual scalability rating, and pinpointed hotspot line markers. |
+| **Documentation Generator** | 📝 | Multi-format doc synthesis | Generates JSDoc/TSDoc specifications, Python PEP-257 docstrings, and clean Markdown API reference tables. |
+| **Code Converter** | 🔄 | Idiomatic multi-language translator | Transpiles across Python, TypeScript, Java, C++, Go, and Rust with type translation and idiomatic notes. |
 
 ---
 
-## 🧪 Multi-Stack Incident Playground
+## 📱 Bonus: DevLens Phone Sentinel Mode
 
-Pre-loaded with 5 realistic developer crash scenarios:
-1. **Next.js 14 / React 19**: Hydration mismatch & `window is not defined` in SSR header.
-2. **FastAPI / Python**: `asyncpg` PostgreSQL connection pool exhaustion & deadlock.
-3. **Docker / Node.js**: Container `OOMKilled (Exit Code 137)` via stream buffer accumulation.
-4. **Rust / Tokio**: Async mutex borrow panic & recursive lock acquisition.
-5. **Android Kotlin**: `NetworkOnMainThreadException` in coroutine lifecycle scope.
-- **Custom Error Ingestion**: Paste any custom stack trace or compiler log for automatic AST parsing.
+For developers on call or during hackathon "phone-only" phases, DevPilot includes the **DevLens Phone Sentinel**:
+1. **Camera OCR Scanner**: Scan your laptop screen or terminal logs using your phone camera and laser HUD.
+2. **🔊 Audio Voice Briefing**: Reads diagnostic findings out loud using the Web Speech Synthesis API.
+3. **Pair Pilot Chat**: Interactive companion for asking follow-up questions (*"Why did this fail?"*, *"Will this break backward compatibility?"*).
+4. **Visual UX Simulation**: Before/after rendering of what users saw vs. the resolved state.
+5. **1-Tap Git Hotfix**: Automated test runner sandbox with 1-click git patch application and celebration confetti.
+6. **iQOO Office Kit Synergy**: Zero-latency peer-to-peer sync between phone and laptop via `BroadcastChannel`.
+
+---
+
+## ⌨️ Keyboard-First Navigation
+
+DevPilot is built for keyboard lovers with dedicated number key navigation:
+- `1` → Developer Dashboard
+- `2` → AI Debugger
+- `3` → Code Explainer
+- `4` → Code Optimizer
+- `5` → Test Generator
+- `6` → Security Scanner
+- `7` → Complexity Analyzer
+- `8` → Documentation Generator
+- `9` → Code Converter
+- `0` → DevLens Sentinel (Phone Cockpit)
 
 ---
 
 ## 💻 Tech Stack & Architecture
 
-- **Frontend**: React 19, TypeScript, Vite
-- **Styling**: Tailored Vanilla CSS design system (iQOO Velocity Orange `#FF5500`, Cyber Cyan `#00E5FF`, Glassmorphism, Carbon Noir `#07090E`)
+- **Frontend**: React 19, TypeScript (strict mode, `verbatimModuleSyntax`)
+- **Build Tool**: Vite 8 with HMR
+- **Styling**: Tailored Modern CSS Design System (Linear / Raycast / Vercel dark mode palette, smooth micro-interactions, responsive grid)
 - **Typography**: Google Fonts (*Space Grotesk*, *JetBrains Mono*, *Inter*)
 - **Icons**: Lucide React
-- **Audio & Speech**: Web Audio API (synthesized frequency chimes) + Web Speech Synthesis API
-- **Cross-Device Bridge**: BroadcastChannel UltraLink for peer-to-peer sync between phone and laptop
-- **Celebration FX**: Canvas Confetti
+- **Local Persistence**: `localStorage` store for statistics, run logs, and snippet history
+- **Audio & Speech**: Web Audio API (synthesized alert chimes) + Web Speech Synthesis API
+- **Cross-Device Bridge**: `BroadcastChannel` UltraLink for peer-to-peer sync
 
 ---
 
 ## 🛠️ Getting Started Locally
 
 ### Prerequisites
-- Node.js 18+ (tested on Node v24)
+- Node.js 18+ (tested on Node v20/v24)
 - npm or pnpm
 
-### Installation
+### Quick Start
 ```bash
 # 1. Clone the repository
-git clone https://github.com/<your-username>/iqoo-devlens-ai.git
+git clone https://github.com/suhaasvooturi/iqoo-devlens-ai.git
 cd iqoo-devlens-ai
 
 # 2. Install dependencies
@@ -103,45 +97,46 @@ npm install
 npm run dev
 ```
 
-### Accessing DevLens
-- **Workstation & Cockpit**: Open [http://localhost:5173/](http://localhost:5173/)
-- **Physical Smartphone Testing**: Open the local IP shown in the terminal (e.g. `http://192.168.1.56:5173/`) or click **"Connect Phone"** in the top bar to scan the QR code!
+### Accessing DevPilot
+- Open **[http://localhost:5173/](http://localhost:5173/)** in your browser.
+- To test mobile or on a physical smartphone, connect to the network address displayed in the terminal (e.g. `http://192.168.1.56:5173/`) or use the QR code in the top bar.
 
 ---
 
-## 🏗️ Project Structure
+## 📁 Project Structure
 
 ```
 iqoo-devlens-ai/
 ├── src/
 │   ├── components/
-│   │   ├── Header.tsx                  # Top navigation, mode switcher, Office Kit status
-│   │   ├── IncidentPicker.tsx          # 5 crash presets & custom error ingestion
-│   │   ├── QRModal.tsx                 # QR code for physical phone connection
-│   │   ├── OfficeKit/
-│   │   │   └── OfficeKitSplitView.tsx  # Dual-screen synergy layout (Laptop + Phone)
-│   │   ├── PhoneCockpit/
-│   │   │   ├── PhoneFrame.tsx          # iQOO smartphone hardware frame & notch
-│   │   │   ├── CameraScanner.tsx       # OCR laser HUD viewfinder
-│   │   │   ├── DiagnosticCard.tsx      # AI diagnosis, audio briefing, NPU toggle
-│   │   │   ├── PairPilotChat.tsx       # Human conversational copilot chat
-│   │   │   ├── VisualPreview.tsx       # Before/after visual UX simulation
-│   │   │   ├── PatchStudio.tsx         # Git diff, test sandbox & 1-tap deploy
-│   │   │   └── PhoneCockpitView.tsx    # Phone cockpit coordinator (5 tabs)
-│   │   └── Workstation/
-│   │       └── WorkstationView.tsx     # Laptop IDE, file tree & live zsh terminal
-│   ├── data/
-│   │   └── incidentPresets.ts          # Realistic multi-stack failure cases
+│   │   ├── Navigation/
+│   │   │   └── Sidebar.tsx             # Linear-style left sidebar with keyboard shortcuts
+│   │   ├── tools/
+│   │   │   ├── DashboardTool.tsx       # Metrics cards, launch tiles & history feed
+│   │   │   ├── DebuggerTool.tsx        # Code + Error trace dual input & git diff
+│   │   │   ├── ExplainerTool.tsx       # Summary, line-by-line & ELI5 breakdown
+│   │   │   ├── OptimizerTool.tsx       # Speedup metrics, memory savings & refactored code
+│   │   │   ├── TestGenTool.tsx         # Multi-framework unit test suite builder
+│   │   │   ├── SecurityScannerTool.tsx # OWASP vulnerability scanner & CWE patches
+│   │   │   ├── ComplexityTool.tsx      # Big-O asymptotic analysis & visual scales
+│   │   │   ├── DocGenTool.tsx          # JSDoc, Python docstrings & Markdown generator
+│   │   │   └── ConverterTool.tsx       # Cross-language code translator
+│   │   ├── PhoneCockpit/               # DevLens Sentinel phone cockpit (5 tabs)
+│   │   ├── Workstation/                # Laptop IDE & terminal view
+│   │   ├── Header.tsx                  # Top status bar & mode switchers
+│   │   └── QRModal.tsx                 # Mobile connect QR modal
 │   ├── services/
-│   │   ├── aiDiagnosticEngine.ts       # Edge NPU inference & heuristic AST parser
-│   │   └── bridgeService.ts            # BroadcastChannel Office Kit P2P sync
+│   │   ├── devPilotEngine.ts           # AST analysis engines & curated samples for all 9 tools
+│   │   ├── historyStorage.ts           # LocalStorage persistence for stats & history
+│   │   ├── aiDiagnosticEngine.ts       # Sentinel heuristic engine
+│   │   └── bridgeService.ts            # P2P cross-device sync
 │   ├── styles/
-│   │   ├── theme.css                   # iQOO brand tokens, neon glow, cyber colors
-│   │   └── components.css              # Glassmorphism, animations, phone shell
+│   │   ├── theme.css                   # Dark mode color tokens & typography
+│   │   └── components.css              # Polished card, badge & button primitives
 │   ├── types/
-│   │   └── index.ts                    # TypeScript interfaces
-│   ├── App.tsx                         # Main state coordinator & Web Audio synthesis
-│   └── main.tsx                        # Application entry point
+│   │   └── index.ts                    # TypeScript domain interfaces
+│   ├── App.tsx                         # Master application state & navigation router
+│   └── main.tsx                        # React application entry point
 ├── package.json
 ├── tsconfig.json
 └── README.md
@@ -150,4 +145,4 @@ iqoo-devlens-ai/
 ---
 
 ## 📄 License
-MIT License © 2026 iQOO Hackathon Team. Built with passion for high-performance developer tools.
+MIT License © 2026 Suhaas Vooturi. Built with passion for high-performance developer tools.

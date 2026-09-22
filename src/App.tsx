@@ -1,17 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import type { DeviceViewMode, AIModelMode, Incident, HardwareTelemetry, HotfixCommitResult } from './types';
+import type { DeviceViewMode, AIModelMode, Incident, HardwareTelemetry, HotfixCommitResult, DevToolId, DashboardStats, AnalysisHistoryItem } from './types';
 import { INCIDENT_PRESETS } from './data/incidentPresets';
 import { Header } from './components/Header';
+import { Sidebar } from './components/Navigation/Sidebar';
+import { DashboardTool } from './components/tools/DashboardTool';
+import { DebuggerTool } from './components/tools/DebuggerTool';
+import { ExplainerTool } from './components/tools/ExplainerTool';
+import { OptimizerTool } from './components/tools/OptimizerTool';
+import { TestGenTool } from './components/tools/TestGenTool';
+import { SecurityScannerTool } from './components/tools/SecurityScannerTool';
+import { ComplexityTool } from './components/tools/ComplexityTool';
+import { DocGenTool } from './components/tools/DocGenTool';
+import { ConverterTool } from './components/tools/ConverterTool';
 import { IncidentPicker } from './components/IncidentPicker';
 import { OfficeKitSplitView } from './components/OfficeKit/OfficeKitSplitView';
 import { PhoneCockpitView } from './components/PhoneCockpit/PhoneCockpitView';
 import { WorkstationView } from './components/Workstation/WorkstationView';
 import { QRModal } from './components/QRModal';
 import { officeKitBridge } from './services/bridgeService';
+import { getStats, getHistory, clearHistory } from './services/historyStorage';
 import './styles/theme.css';
 import './styles/components.css';
 
 export const App: React.FC = () => {
+  const [activeTool, setActiveTool] = useState<DevToolId>('dashboard');
+  const [stats, setStats] = useState<DashboardStats>(getStats());
+  const [history, setHistory] = useState<AnalysisHistoryItem[]>(getHistory());
+
+  // Phone Sentinel state (for iQOO Hackathon cross-device experience)
   const [viewMode, setViewMode] = useState<DeviceViewMode>('split');
   const [currentIncident, setCurrentIncident] = useState<Incident>(INCIDENT_PRESETS[0]);
   const [modelMode, setModelMode] = useState<AIModelMode>('edge-local');
@@ -28,14 +44,41 @@ export const App: React.FC = () => {
     syncStatus: 'SYNCED',
   });
 
-  // Auto-detect mobile screen on mount
+  // Refresh history and stats periodically or when activeTool changes
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.innerWidth <= 768) {
-      setViewMode('phone');
-    }
+    setStats(getStats());
+    setHistory(getHistory());
+  }, [activeTool]);
+
+  // Keyboard navigation for tools (1-9, 0)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't trigger if user is typing in textarea or input
+      if (['TEXTAREA', 'INPUT'].includes((e.target as HTMLElement)?.tagName)) return;
+
+      const keyMap: Record<string, DevToolId> = {
+        '1': 'dashboard',
+        '2': 'debugger',
+        '3': 'explainer',
+        '4': 'optimizer',
+        '5': 'testgen',
+        '6': 'security',
+        '7': 'complexity',
+        '8': 'docgen',
+        '9': 'converter',
+        '0': 'sentinel',
+      };
+
+      if (keyMap[e.key]) {
+        setActiveTool(keyMap[e.key]);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Subscribe to Office Kit Bridge for cross-tab or cross-device real-time sync
+  // Office Kit Bridge sync
   useEffect(() => {
     const unsubscribe = officeKitBridge.subscribe((msg) => {
       if (msg.type === 'INCIDENT_SELECTED') {
@@ -50,27 +93,7 @@ export const App: React.FC = () => {
     return unsubscribe;
   }, []);
 
-  // Subtle Web Audio high-tech sound synthesizers
-  const playTechAudio = (frequency = 880, type: OscillatorType = 'sine', duration = 0.12) => {
-    try {
-      const audioCtx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = type;
-      osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
-      gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + duration);
-    } catch {
-      // AudioContext unavailable or restricted
-    }
-  };
-
   const handleSelectIncident = (incident: Incident) => {
-    playTechAudio(520, 'triangle', 0.1);
     setCurrentIncident(incident);
     setIsDeployed(false);
     setDeployedResult(null);
@@ -78,7 +101,6 @@ export const App: React.FC = () => {
   };
 
   const handleDeployHotfix = (result: HotfixCommitResult) => {
-    playTechAudio(960, 'sine', 0.25);
     setIsDeployed(true);
     setDeployedResult(result);
     officeKitBridge.send({
@@ -88,80 +110,109 @@ export const App: React.FC = () => {
     });
   };
 
-  const handleResetIncident = () => {
-    setIsDeployed(false);
-    setDeployedResult(null);
+  const handleClearHistory = () => {
+    clearHistory();
+    setHistory([]);
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg-space)' }}>
-      {/* Top Bar with View Mode Switcher and Office Kit Telemetry */}
+    <div style={{ minHeight: '100vh', background: 'var(--bg-app)', display: 'flex', flexDirection: 'column' }}>
+      {/* Header */}
       <Header
         viewMode={viewMode}
-        onViewModeChange={(mode) => {
-          playTechAudio(640, 'sine', 0.08);
-          setViewMode(mode);
-        }}
+        onViewModeChange={setViewMode}
         onOpenQRModal={() => setIsQRModalOpen(true)}
         latencyMs={telemetry.officeKitLatency}
       />
 
-      <main className="app-container">
-        {/* Incident Presets Bar */}
-        <IncidentPicker
-          currentIncident={currentIncident}
-          onSelectIncident={handleSelectIncident}
-        />
+      {/* Main Toolkit Shell: Sidebar + Content */}
+      <div style={{ display: 'flex', flex: 1, minHeight: 'calc(100vh - 56px)' }}>
+        <Sidebar activeTool={activeTool} onSelectTool={setActiveTool} />
 
-        {/* Dynamic View Layout */}
-        {viewMode === 'split' && (
-          <OfficeKitSplitView
-            incident={currentIncident}
-            telemetry={telemetry}
-            modelMode={modelMode}
-            onModelModeChange={(mode) => {
-              setModelMode(mode);
-              setTelemetry((prev) => ({
-                ...prev,
-                npuInferenceSpeed: mode === 'edge-local' ? '28.6 tokens/s' : '42.1 tokens/s',
-              }));
-            }}
-            onDeployHotfix={handleDeployHotfix}
-            isDeployed={isDeployed}
-            deployedResult={deployedResult}
-            onResetIncident={handleResetIncident}
-          />
-        )}
-
-        {viewMode === 'phone' && (
-          <PhoneCockpitView
-            incident={currentIncident}
-            telemetry={telemetry}
-            modelMode={modelMode}
-            onModelModeChange={(mode) => {
-              setModelMode(mode);
-              setTelemetry((prev) => ({
-                ...prev,
-                npuInferenceSpeed: mode === 'edge-local' ? '28.6 tokens/s' : '42.1 tokens/s',
-              }));
-            }}
-            onDeployHotfix={handleDeployHotfix}
-            isDeployed={isDeployed}
-            deployedResult={deployedResult}
-          />
-        )}
-
-        {viewMode === 'workstation' && (
-          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-            <WorkstationView
-              incident={currentIncident}
-              isDeployed={isDeployed}
-              deployedResult={deployedResult}
-              onResetIncident={handleResetIncident}
+        <main style={{ flex: 1, padding: '24px', overflowY: 'auto', maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
+          {activeTool === 'dashboard' && (
+            <DashboardTool
+              stats={stats}
+              history={history}
+              onSelectTool={setActiveTool}
+              onClearHistory={handleClearHistory}
             />
-          </div>
-        )}
-      </main>
+          )}
+
+          {activeTool === 'debugger' && <DebuggerTool />}
+          {activeTool === 'explainer' && <ExplainerTool />}
+          {activeTool === 'optimizer' && <OptimizerTool />}
+          {activeTool === 'testgen' && <TestGenTool />}
+          {activeTool === 'security' && <SecurityScannerTool />}
+          {activeTool === 'complexity' && <ComplexityTool />}
+          {activeTool === 'docgen' && <DocGenTool />}
+          {activeTool === 'converter' && <ConverterTool />}
+
+          {/* DevLens Sentinel: Phone-First Cross-Device View for Hackathon */}
+          {activeTool === 'sentinel' && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <IncidentPicker
+                currentIncident={currentIncident}
+                onSelectIncident={handleSelectIncident}
+              />
+
+              {viewMode === 'split' && (
+                <OfficeKitSplitView
+                  incident={currentIncident}
+                  telemetry={telemetry}
+                  modelMode={modelMode}
+                  onModelModeChange={(mode) => {
+                    setModelMode(mode);
+                    setTelemetry((prev) => ({
+                      ...prev,
+                      npuInferenceSpeed: mode === 'edge-local' ? '28.6 tokens/s' : '42.1 tokens/s',
+                    }));
+                  }}
+                  onDeployHotfix={handleDeployHotfix}
+                  isDeployed={isDeployed}
+                  deployedResult={deployedResult}
+                  onResetIncident={() => {
+                    setIsDeployed(false);
+                    setDeployedResult(null);
+                  }}
+                />
+              )}
+
+              {viewMode === 'phone' && (
+                <PhoneCockpitView
+                  incident={currentIncident}
+                  telemetry={telemetry}
+                  modelMode={modelMode}
+                  onModelModeChange={(mode) => {
+                    setModelMode(mode);
+                    setTelemetry((prev) => ({
+                      ...prev,
+                      npuInferenceSpeed: mode === 'edge-local' ? '28.6 tokens/s' : '42.1 tokens/s',
+                    }));
+                  }}
+                  onDeployHotfix={handleDeployHotfix}
+                  isDeployed={isDeployed}
+                  deployedResult={deployedResult}
+                />
+              )}
+
+              {viewMode === 'workstation' && (
+                <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+                  <WorkstationView
+                    incident={currentIncident}
+                    isDeployed={isDeployed}
+                    deployedResult={deployedResult}
+                    onResetIncident={() => {
+                      setIsDeployed(false);
+                      setDeployedResult(null);
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+        </main>
+      </div>
 
       {/* QR Connect Modal */}
       <QRModal isOpen={isQRModalOpen} onClose={() => setIsQRModalOpen(false)} />

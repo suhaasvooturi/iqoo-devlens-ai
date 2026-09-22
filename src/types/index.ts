@@ -2,6 +2,37 @@ export type DeviceViewMode = 'split' | 'phone' | 'workstation';
 
 export type AIModelMode = 'edge-local' | 'cloud-deep';
 
+export type DevToolId =
+  | 'dashboard'
+  | 'debugger'
+  | 'explainer'
+  | 'optimizer'
+  | 'testgen'
+  | 'security'
+  | 'complexity'
+  | 'docgen'
+  | 'converter'
+  | 'sentinel';
+
+export interface AnalysisHistoryItem {
+  id: string;
+  toolId: DevToolId;
+  toolName: string;
+  language: string;
+  summary: string;
+  timestamp: string;
+  status: 'success' | 'warning' | 'error';
+  snippetPreview: string;
+}
+
+export interface DashboardStats {
+  totalAnalyses: number;
+  bugsFixed: number;
+  vulnerabilitiesFound: number;
+  optimizationsApplied: number;
+  testsGenerated: number;
+}
+
 export interface StackFrame {
   file: string;
   line: number;
@@ -21,15 +52,15 @@ export interface Incident {
   culpritLine: number;
   errorType: string;
   severity: 'CRITICAL' | 'HIGH' | 'MEDIUM';
-  severityScore: number; // 1 - 10
+  severityScore: number;
   rootCause: string;
-  humanSummary: string; // Warm, senior-engineer plain English explanation
-  voiceBriefing: string; // Speech synthesis script
+  humanSummary: string;
+  voiceBriefing: string;
   devContext: {
-    reportedBy: string; // e.g. "Sentry Webhook" or "Alex (QA Lead)"
-    timeReported: string; // e.g. "4 minutes ago"
-    assignee: string; // e.g. "Suhas (Lead Dev)"
-    activeBranch: string; // e.g. "feat/nav-redesign"
+    reportedBy: string;
+    timeReported: string;
+    assignee: string;
+    activeBranch: string;
   };
   visualPreview: {
     type: 'web' | 'api' | 'docker' | 'mobile';
@@ -60,11 +91,11 @@ export interface Incident {
 }
 
 export interface HardwareTelemetry {
-  npuInferenceSpeed: string; // e.g. "21.4 tokens/s"
-  modelActive: string; // e.g. "Qwen2.5-Coder-1.5B (4-bit NPU)"
-  batteryTemp: string; // e.g. "32.1°C"
+  npuInferenceSpeed: string;
+  modelActive: string;
+  batteryTemp: string;
   mode: 'Monster Mode' | 'Efficiency Mode';
-  officeKitLatency: string; // e.g. "2.8 ms"
+  officeKitLatency: string;
   syncStatus: 'SYNCED' | 'TRANSFERRING' | 'STANDBY';
 }
 
