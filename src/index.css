@@ -1,0 +1,13 @@
+/* Clean reset for DevLens AI */
+@import './styles/theme.css';
+@import './styles/components.css';
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
