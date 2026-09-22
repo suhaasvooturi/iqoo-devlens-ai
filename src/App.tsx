@@ -17,6 +17,7 @@ import { OfficeKitSplitView } from './components/OfficeKit/OfficeKitSplitView';
 import { PhoneCockpitView } from './components/PhoneCockpit/PhoneCockpitView';
 import { WorkstationView } from './components/Workstation/WorkstationView';
 import { QRModal } from './components/QRModal';
+import { CommandPalette } from './components/CommandPalette/CommandPalette';
 import { officeKitBridge } from './services/bridgeService';
 import { getStats, getHistory, clearHistory } from './services/historyStorage';
 import './styles/theme.css';
@@ -26,6 +27,7 @@ export const App: React.FC = () => {
   const [activeTool, setActiveTool] = useState<DevToolId>('dashboard');
   const [stats, setStats] = useState<DashboardStats>(getStats());
   const [history, setHistory] = useState<AnalysisHistoryItem[]>(getHistory());
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
 
   // Phone Sentinel state (for iQOO Hackathon cross-device experience)
   const [viewMode, setViewMode] = useState<DeviceViewMode>('split');
@@ -50,10 +52,17 @@ export const App: React.FC = () => {
     setHistory(getHistory());
   }, [activeTool]);
 
-  // Keyboard navigation for tools (1-9, 0)
+  // Global keyboard shortcuts (Ctrl+K for Command Palette, 1-9 & 0 for Tools)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Don't trigger if user is typing in textarea or input
+      // Ctrl+K / Cmd+K Command Palette trigger
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsCommandPaletteOpen((prev) => !prev);
+        return;
+      }
+
+      // Don't trigger number shortcuts if user is typing in input or textarea
       if (['TEXTAREA', 'INPUT'].includes((e.target as HTMLElement)?.tagName)) return;
 
       const keyMap: Record<string, DevToolId> = {
@@ -115,6 +124,13 @@ export const App: React.FC = () => {
     setHistory([]);
   };
 
+  const handleRunHackathonDemo = () => {
+    setActiveTool('dashboard');
+  };
+
+  // Pure mobile cockpit view when on phone mode
+  const isPureMobile = viewMode === 'phone';
+
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-app)', display: 'flex', flexDirection: 'column' }}>
       {/* Header */}
@@ -122,97 +138,114 @@ export const App: React.FC = () => {
         viewMode={viewMode}
         onViewModeChange={setViewMode}
         onOpenQRModal={() => setIsQRModalOpen(true)}
+        onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
         latencyMs={telemetry.officeKitLatency}
       />
 
       {/* Main Toolkit Shell: Sidebar + Content */}
       <div style={{ display: 'flex', flex: 1, minHeight: 'calc(100vh - 56px)' }}>
-        <Sidebar activeTool={activeTool} onSelectTool={setActiveTool} />
+        {/* Hide desktop sidebar on pure phone mode for dedicated mobile cockpit */}
+        {!isPureMobile && <Sidebar activeTool={activeTool} onSelectTool={setActiveTool} />}
 
-        <main style={{ flex: 1, padding: '24px', overflowY: 'auto', maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
-          {activeTool === 'dashboard' && (
-            <DashboardTool
-              stats={stats}
-              history={history}
-              onSelectTool={setActiveTool}
-              onClearHistory={handleClearHistory}
+        <main style={{ flex: 1, padding: isPureMobile ? '12px' : '24px', overflowY: 'auto', maxWidth: isPureMobile ? '480px' : '1400px', margin: '0 auto', width: '100%' }}>
+          {isPureMobile ? (
+            // Dedicated standalone mobile cockpit
+            <PhoneCockpitView
+              incident={currentIncident}
+              telemetry={telemetry}
+              modelMode={modelMode}
+              onModelModeChange={(mode) => {
+                setModelMode(mode);
+                setTelemetry((prev) => ({
+                  ...prev,
+                  npuInferenceSpeed: mode === 'edge-local' ? '28.6 tokens/s' : '42.1 tokens/s',
+                }));
+              }}
+              onDeployHotfix={handleDeployHotfix}
+              isDeployed={isDeployed}
+              deployedResult={deployedResult}
             />
-          )}
-
-          {activeTool === 'debugger' && <DebuggerTool />}
-          {activeTool === 'explainer' && <ExplainerTool />}
-          {activeTool === 'optimizer' && <OptimizerTool />}
-          {activeTool === 'testgen' && <TestGenTool />}
-          {activeTool === 'security' && <SecurityScannerTool />}
-          {activeTool === 'complexity' && <ComplexityTool />}
-          {activeTool === 'docgen' && <DocGenTool />}
-          {activeTool === 'converter' && <ConverterTool />}
-
-          {/* DevLens Sentinel: Phone-First Cross-Device View for Hackathon */}
-          {activeTool === 'sentinel' && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <IncidentPicker
-                currentIncident={currentIncident}
-                onSelectIncident={handleSelectIncident}
-              />
-
-              {viewMode === 'split' && (
-                <OfficeKitSplitView
-                  incident={currentIncident}
-                  telemetry={telemetry}
-                  modelMode={modelMode}
-                  onModelModeChange={(mode) => {
-                    setModelMode(mode);
-                    setTelemetry((prev) => ({
-                      ...prev,
-                      npuInferenceSpeed: mode === 'edge-local' ? '28.6 tokens/s' : '42.1 tokens/s',
-                    }));
-                  }}
-                  onDeployHotfix={handleDeployHotfix}
-                  isDeployed={isDeployed}
-                  deployedResult={deployedResult}
-                  onResetIncident={() => {
-                    setIsDeployed(false);
-                    setDeployedResult(null);
-                  }}
+          ) : (
+            // Desktop Tools Shell
+            <>
+              {activeTool === 'dashboard' && (
+                <DashboardTool
+                  stats={stats}
+                  history={history}
+                  onSelectTool={setActiveTool}
+                  onClearHistory={handleClearHistory}
+                  onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
                 />
               )}
 
-              {viewMode === 'phone' && (
-                <PhoneCockpitView
-                  incident={currentIncident}
-                  telemetry={telemetry}
-                  modelMode={modelMode}
-                  onModelModeChange={(mode) => {
-                    setModelMode(mode);
-                    setTelemetry((prev) => ({
-                      ...prev,
-                      npuInferenceSpeed: mode === 'edge-local' ? '28.6 tokens/s' : '42.1 tokens/s',
-                    }));
-                  }}
-                  onDeployHotfix={handleDeployHotfix}
-                  isDeployed={isDeployed}
-                  deployedResult={deployedResult}
-                />
-              )}
+              {activeTool === 'debugger' && <DebuggerTool />}
+              {activeTool === 'explainer' && <ExplainerTool />}
+              {activeTool === 'optimizer' && <OptimizerTool />}
+              {activeTool === 'testgen' && <TestGenTool />}
+              {activeTool === 'security' && <SecurityScannerTool />}
+              {activeTool === 'complexity' && <ComplexityTool />}
+              {activeTool === 'docgen' && <DocGenTool />}
+              {activeTool === 'converter' && <ConverterTool />}
 
-              {viewMode === 'workstation' && (
-                <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-                  <WorkstationView
-                    incident={currentIncident}
-                    isDeployed={isDeployed}
-                    deployedResult={deployedResult}
-                    onResetIncident={() => {
-                      setIsDeployed(false);
-                      setDeployedResult(null);
-                    }}
+              {/* DevLens Sentinel: Phone-First Cross-Device View for Hackathon */}
+              {activeTool === 'sentinel' && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  <IncidentPicker
+                    currentIncident={currentIncident}
+                    onSelectIncident={handleSelectIncident}
                   />
+
+                  {viewMode === 'split' && (
+                    <OfficeKitSplitView
+                      incident={currentIncident}
+                      telemetry={telemetry}
+                      modelMode={modelMode}
+                      onModelModeChange={(mode) => {
+                        setModelMode(mode);
+                        setTelemetry((prev) => ({
+                          ...prev,
+                          npuInferenceSpeed: mode === 'edge-local' ? '28.6 tokens/s' : '42.1 tokens/s',
+                        }));
+                      }}
+                      onDeployHotfix={handleDeployHotfix}
+                      isDeployed={isDeployed}
+                      deployedResult={deployedResult}
+                      onResetIncident={() => {
+                        setIsDeployed(false);
+                        setDeployedResult(null);
+                      }}
+                    />
+                  )}
+
+                  {viewMode === 'workstation' && (
+                    <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+                      <WorkstationView
+                        incident={currentIncident}
+                        isDeployed={isDeployed}
+                        deployedResult={deployedResult}
+                        onResetIncident={() => {
+                          setIsDeployed(false);
+                          setDeployedResult(null);
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
               )}
-            </div>
+            </>
           )}
         </main>
       </div>
+
+      {/* Universal Command Palette (Ctrl+K) */}
+      <CommandPalette
+        isOpen={isCommandPaletteOpen}
+        onClose={() => setIsCommandPaletteOpen(false)}
+        onSelectTool={setActiveTool}
+        onOpenQR={() => setIsQRModalOpen(true)}
+        onRunDemo={handleRunHackathonDemo}
+        onClearHistory={handleClearHistory}
+      />
 
       {/* QR Connect Modal */}
       <QRModal isOpen={isQRModalOpen} onClose={() => setIsQRModalOpen(false)} />

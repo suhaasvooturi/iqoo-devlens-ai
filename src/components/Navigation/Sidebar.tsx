@@ -108,8 +108,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTool, onSelectTool }) =>
 
       <div style={{ marginTop: 'auto', paddingTop: '14px', borderTop: '1px solid var(--border-subtle)' }}>
         <div style={{ padding: '8px 10px', background: 'var(--bg-app)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)', fontSize: '11px', color: 'var(--text-muted)' }}>
-          <div style={{ color: 'var(--text-primary)', fontWeight: 600, marginBottom: '2px' }}>DevPilot Suite</div>
-          <div>iQOO Hackathon 2026</div>
+          <div style={{ color: 'var(--text-primary)', fontWeight: 600, marginBottom: '2px' }}>DevLens AI Copilot</div>
+          <div>iQOO Engineering OS</div>
         </div>
       </div>
     </aside>
